@@ -7,33 +7,101 @@
 //
 
 #import "ECTableViewController.h"
+#import "ECDealTableViewCell.h"
+#import "ECDeal.h"
+#import "ECUser.h"
+#import "ECAvatar.h"
 
 @interface ECTableViewController ()
+// Fetches JSON data from the server and parses it
+- (void)fetchData;
+
+// Collection of Existing Communal deals downloaded from kECDealJSONURL
+@property(nonatomic, strong)NSMutableArray *deals;
 
 @end
 
-@implementation ECTableViewController
+// The URL string that will be used to fetch data from the server
+NSString * const kECDealJSONURL = @"http://sheltered-bastion-2512.herokuapp.com/feed.json";
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
+@implementation ECTableViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    self.view.backgroundColor = [UIColor purpleColor];
+    _deals = [[NSMutableArray alloc] init];
+    [self fetchData];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (void)fetchData
+{
+    NSURL *url = [[NSURL alloc] initWithString:kECDealJSONURL];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
+    
+    // Create a completion handler to parse and marshall JSON
+    void (^completionHandler) (NSURLResponse* response, NSData* data, NSError* connectionError) =
+    ^(NSURLResponse* response, NSData* jsonData, NSError* connectionError) {
+        if (!connectionError) {
+            NSArray *asyncItems = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                                       options:NSJSONReadingMutableLeaves
+                                                                         error:nil];
+            [self marshallNewData:asyncItems];
+            [self.tableView reloadData];
+            
+        } else {
+            [[[UIAlertView alloc] initWithTitle:@"Network Issues"
+                                        message:@"We are unable to bring you any deals at this time."
+                                       delegate:nil
+                              cancelButtonTitle:@"Close"
+                              otherButtonTitles:nil] show];
+        }
+    };
+    
+    // Request on the main queue (because it's really important) asynchronously (so the UI display gracefully)
+    [NSURLConnection sendAsynchronousRequest:request
+                                       queue:[NSOperationQueue mainQueue]
+                           completionHandler:completionHandler];
+}
+
+- (void)marshallNewData:(NSArray *)jsonItems
+{
+    [_deals removeAllObjects];
+    for (NSDictionary *entry in jsonItems) {
+        // populate a new deal
+        ECDeal *deal = [[ECDeal alloc] init];
+        deal.monetaryInvestment = [entry objectForKey:@"attrib"];
+        deal.sponsor = [entry objectForKey:@"desc"];
+        deal.href = [entry objectForKey:@"href"];
+        deal.src = [entry objectForKey:@"src"];
+        
+        // populate a new user
+        NSDictionary *userEntry = [entry objectForKey:@"user"];
+        ECUser *user = [[ECUser alloc] init];
+        user.name = [userEntry objectForKey:@"name"];
+        user.username = [userEntry objectForKey:@"username"];
+        
+        // populate a user's avatar
+        NSDictionary *avatarEntry = [userEntry objectForKey:@"avatar"];
+        ECAvatar *avatar = [[ECAvatar alloc] init];
+        avatar.src = [avatarEntry objectForKey:@"src"];
+        NSString *width = [avatarEntry objectForKey:@"width"];
+        NSString *height = [avatarEntry objectForKey:@"height"];
+        CGSize size = CGSizeMake([width floatValue], [height floatValue]);
+        avatar.size = size;
+        
+        // set the user's avatar
+        user.avatar = avatar;
+        
+        // set the deal's user
+        deal.user = user;
+        [_deals addObject:deal];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -46,24 +114,21 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
+    return _deals.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    static NSString *CellIdentifier = @"ECDealCellId";
+    ECDealTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-    // Configure the cell...
+    ECDeal *deal = [self.deals objectAtIndex:indexPath.row];
+    cell.label.text = deal.user.avatar.src;
     
     return cell;
 }

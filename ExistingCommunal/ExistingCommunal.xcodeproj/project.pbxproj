@@ -21,6 +21,10 @@
 		0FAACA2A1915D51B00CF9CDF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0FAACA281915D51B00CF9CDF /* InfoPlist.strings */; };
 		0FAACA2C1915D51B00CF9CDF /* ExistingCommunalTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAACA2B1915D51B00CF9CDF /* ExistingCommunalTests.m */; };
 		0FAACA371915D62100CF9CDF /* ECTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAACA361915D62100CF9CDF /* ECTableViewController.m */; };
+		0FAACA3D19188BD200CF9CDF /* ECAvatar.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAACA3C19188BD200CF9CDF /* ECAvatar.m */; };
+		0FAACA4019188E5600CF9CDF /* ECUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAACA3F19188E5600CF9CDF /* ECUser.m */; };
+		0FAACA4319188F4500CF9CDF /* ECDeal.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAACA4219188F4500CF9CDF /* ECDeal.m */; };
+		0FAACA471918A00700CF9CDF /* ECDealTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAACA461918A00700CF9CDF /* ECDealTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +57,14 @@
 		0FAACA2B1915D51B00CF9CDF /* ExistingCommunalTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExistingCommunalTests.m; sourceTree = "<group>"; };
 		0FAACA351915D62100CF9CDF /* ECTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECTableViewController.h; sourceTree = "<group>"; };
 		0FAACA361915D62100CF9CDF /* ECTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECTableViewController.m; sourceTree = "<group>"; };
+		0FAACA3B19188BD200CF9CDF /* ECAvatar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECAvatar.h; sourceTree = "<group>"; };
+		0FAACA3C19188BD200CF9CDF /* ECAvatar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECAvatar.m; sourceTree = "<group>"; };
+		0FAACA3E19188E5600CF9CDF /* ECUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECUser.h; sourceTree = "<group>"; };
+		0FAACA3F19188E5600CF9CDF /* ECUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECUser.m; sourceTree = "<group>"; };
+		0FAACA4119188F4500CF9CDF /* ECDeal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECDeal.h; sourceTree = "<group>"; };
+		0FAACA4219188F4500CF9CDF /* ECDeal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECDeal.m; sourceTree = "<group>"; };
+		0FAACA451918A00700CF9CDF /* ECDealTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECDealTableViewCell.h; sourceTree = "<group>"; };
+		0FAACA461918A00700CF9CDF /* ECDealTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECDealTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +124,8 @@
 		0FAACA061915D51A00CF9CDF /* ExistingCommunal */ = {
 			isa = PBXGroup;
 			children = (
+				0FAACA4419189FCE00CF9CDF /* views */,
+				0FAACA3A19188BAC00CF9CDF /* models */,
 				0FAACA0F1915D51A00CF9CDF /* SNWAppDelegate.h */,
 				0FAACA101915D51A00CF9CDF /* SNWAppDelegate.m */,
 				0FAACA121915D51A00CF9CDF /* Main.storyboard */,
@@ -150,6 +164,28 @@
 				0FAACA281915D51B00CF9CDF /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		0FAACA3A19188BAC00CF9CDF /* models */ = {
+			isa = PBXGroup;
+			children = (
+				0FAACA3B19188BD200CF9CDF /* ECAvatar.h */,
+				0FAACA3C19188BD200CF9CDF /* ECAvatar.m */,
+				0FAACA3E19188E5600CF9CDF /* ECUser.h */,
+				0FAACA3F19188E5600CF9CDF /* ECUser.m */,
+				0FAACA4119188F4500CF9CDF /* ECDeal.h */,
+				0FAACA4219188F4500CF9CDF /* ECDeal.m */,
+			);
+			name = models;
+			sourceTree = "<group>";
+		};
+		0FAACA4419189FCE00CF9CDF /* views */ = {
+			isa = PBXGroup;
+			children = (
+				0FAACA451918A00700CF9CDF /* ECDealTableViewCell.h */,
+				0FAACA461918A00700CF9CDF /* ECDealTableViewCell.m */,
+			);
+			name = views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,9 +286,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FAACA3D19188BD200CF9CDF /* ECAvatar.m in Sources */,
 				0FAACA0D1915D51A00CF9CDF /* main.m in Sources */,
 				0FAACA111915D51A00CF9CDF /* SNWAppDelegate.m in Sources */,
+				0FAACA471918A00700CF9CDF /* ECDealTableViewCell.m in Sources */,
+				0FAACA4319188F4500CF9CDF /* ECDeal.m in Sources */,
 				0FAACA371915D62100CF9CDF /* ECTableViewController.m in Sources */,
+				0FAACA4019188E5600CF9CDF /* ECUser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
