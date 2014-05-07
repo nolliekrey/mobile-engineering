@@ -21,8 +21,11 @@
 // A link to the Existing Communal site for more information
 @property (nonatomic, strong) NSString *href;
 
-// The source URL for the image that should accompany the blurp
+// The source URL for the image that should acompany the blurp
 @property (nonatomic, strong) NSString *src;
+
+// The actual image that should acompany the blurp
+@property (nonatomic, strong) UIImage *img;
 
 // The user associated with this deal
 @property (nonatomic, strong) ECUser *user;

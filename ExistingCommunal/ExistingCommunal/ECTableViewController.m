@@ -11,6 +11,7 @@
 #import "ECDeal.h"
 #import "ECUser.h"
 #import "ECAvatar.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface ECTableViewController ()
 // Fetches JSON data from the server and parses it
@@ -126,9 +127,43 @@ NSString * const kECDealJSONURL = @"http://sheltered-bastion-2512.herokuapp.com/
 {
     static NSString *CellIdentifier = @"ECDealCellId";
     ECDealTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    if ([cell.label.text isEqualToString:@"Label"]) {
+        // This is a new label and it needs a gradient
+        cell.gradientView.backgroundColor = [UIColor clearColor];
+        CAGradientLayer *gradient = [CAGradientLayer layer];
+        gradient.frame = cell.gradientView.bounds;
+        UIColor *silverColor = [UIColor colorWithRed:198.0f/255.0f green:198.0f/255.0f blue:198.0f/255.0f alpha:0.5];
+        gradient.colors = [NSArray arrayWithObjects:(id)[silverColor CGColor], (id)[[UIColor clearColor] CGColor], nil];
+        [cell.gradientView.layer insertSublayer:gradient atIndex:0];
+    }
     
     ECDeal *deal = [self.deals objectAtIndex:indexPath.row];
-    cell.label.text = deal.user.avatar.src;
+    cell.label.text = deal.monetaryInvestment;
+    if (!deal.img) {
+        //get a dispatch queue
+        dispatch_queue_t concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        //this will start the image loading in bg
+        dispatch_async(concurrentQueue, ^{
+            NSURL *url = [[NSURL alloc] initWithString:deal.src];
+            NSData *image = [[NSData alloc] initWithContentsOfURL:url];
+            
+            //this will set the image when loading is finished
+            dispatch_async(dispatch_get_main_queue(), ^{
+                deal.img = [UIImage imageWithData:image];
+                cell.mainImage.alpha = 0.0f;
+                cell.mainImage.image = deal.img;
+                [UIView animateWithDuration:0.2f
+                                      delay:0.0f
+                                    options:UIViewAnimationOptionAllowUserInteraction
+                                 animations:^{
+                                     cell.mainImage.alpha = 1.0f;
+                                 }
+                 completion:nil];
+            });
+        });
+    } else {
+        cell.mainImage.image = deal.img;
+    }
     
     return cell;
 }

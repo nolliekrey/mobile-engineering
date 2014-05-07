@@ -14,4 +14,9 @@
 // TODO: replace this Proof of concept label
 @property (strong, nonatomic) IBOutlet UILabel *label;
 
+// Gradient view
+@property (strong, nonatomic) IBOutlet UIView *gradientView;
+
+@property (strong, nonatomic) IBOutlet UIImageView *mainImage;
+
 @end
