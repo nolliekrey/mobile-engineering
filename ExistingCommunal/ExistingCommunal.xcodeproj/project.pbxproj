@@ -25,6 +25,7 @@
 		0FAACA4019188E5600CF9CDF /* ECUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAACA3F19188E5600CF9CDF /* ECUser.m */; };
 		0FAACA4319188F4500CF9CDF /* ECDeal.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAACA4219188F4500CF9CDF /* ECDeal.m */; };
 		0FAACA471918A00700CF9CDF /* ECDealTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAACA461918A00700CF9CDF /* ECDealTableViewCell.m */; };
+		0FAACA4B1919CE5900CF9CDF /* ECNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAACA4A1919CE5900CF9CDF /* ECNavigationController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,8 @@
 		0FAACA4219188F4500CF9CDF /* ECDeal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECDeal.m; sourceTree = "<group>"; };
 		0FAACA451918A00700CF9CDF /* ECDealTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECDealTableViewCell.h; sourceTree = "<group>"; };
 		0FAACA461918A00700CF9CDF /* ECDealTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECDealTableViewCell.m; sourceTree = "<group>"; };
+		0FAACA491919CE5900CF9CDF /* ECNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECNavigationController.h; sourceTree = "<group>"; };
+		0FAACA4A1919CE5900CF9CDF /* ECNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECNavigationController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,14 +127,13 @@
 		0FAACA061915D51A00CF9CDF /* ExistingCommunal */ = {
 			isa = PBXGroup;
 			children = (
+				0FAACA481919CE2500CF9CDF /* controllers */,
 				0FAACA4419189FCE00CF9CDF /* views */,
 				0FAACA3A19188BAC00CF9CDF /* models */,
 				0FAACA0F1915D51A00CF9CDF /* SNWAppDelegate.h */,
 				0FAACA101915D51A00CF9CDF /* SNWAppDelegate.m */,
 				0FAACA121915D51A00CF9CDF /* Main.storyboard */,
 				0FAACA181915D51B00CF9CDF /* Images.xcassets */,
-				0FAACA351915D62100CF9CDF /* ECTableViewController.h */,
-				0FAACA361915D62100CF9CDF /* ECTableViewController.m */,
 				0FAACA071915D51A00CF9CDF /* Supporting Files */,
 			);
 			path = ExistingCommunal;
@@ -186,6 +188,17 @@
 				0FAACA461918A00700CF9CDF /* ECDealTableViewCell.m */,
 			);
 			name = views;
+			sourceTree = "<group>";
+		};
+		0FAACA481919CE2500CF9CDF /* controllers */ = {
+			isa = PBXGroup;
+			children = (
+				0FAACA351915D62100CF9CDF /* ECTableViewController.h */,
+				0FAACA361915D62100CF9CDF /* ECTableViewController.m */,
+				0FAACA491919CE5900CF9CDF /* ECNavigationController.h */,
+				0FAACA4A1919CE5900CF9CDF /* ECNavigationController.m */,
+			);
+			name = controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -293,6 +306,7 @@
 				0FAACA4319188F4500CF9CDF /* ECDeal.m in Sources */,
 				0FAACA371915D62100CF9CDF /* ECTableViewController.m in Sources */,
 				0FAACA4019188E5600CF9CDF /* ECUser.m in Sources */,
+				0FAACA4B1919CE5900CF9CDF /* ECNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
