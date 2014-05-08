@@ -21,7 +21,10 @@
 - (IBAction)triggerDealImageActionWithSender:(id)sender;
 
 // Collection of Existing Communal deals downloaded from kECDealJSONURL
-@property(nonatomic, strong)NSMutableArray *deals;
+@property (nonatomic, strong) NSMutableArray *deals;
+
+// Background work/downloading indicator
+@property (nonatomic, strong) UIActivityIndicatorView *spinner;
 
 @end
 
@@ -50,12 +53,22 @@ NSString * const kECDealJSONURL = @"http://sheltered-bastion-2512.herokuapp.com/
 
 - (void)fetchData
 {
+    if (!self.spinner) {
+        self.spinner = [[UIActivityIndicatorView alloc]
+                                            initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        self.spinner.center = CGPointMake(160, 240);
+        self.spinner.hidesWhenStopped = YES;
+        [self.view addSubview:self.spinner];
+        [self.spinner startAnimating];
+    }
+    
     NSURL *url = [[NSURL alloc] initWithString:kECDealJSONURL];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     
     // Create a completion handler to parse and marshall JSON
     void (^completionHandler) (NSURLResponse* response, NSData* data, NSError* connectionError) =
     ^(NSURLResponse* response, NSData* jsonData, NSError* connectionError) {
+        [self.spinner stopAnimating];
         if (!connectionError) {
             NSArray *asyncItems = [NSJSONSerialization JSONObjectWithData:jsonData
                                                                        options:NSJSONReadingMutableLeaves
@@ -197,56 +210,4 @@ NSString * const kECDealJSONURL = @"http://sheltered-bastion-2512.herokuapp.com/
     
     return cell;
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a story board-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-
- */
-
 @end
