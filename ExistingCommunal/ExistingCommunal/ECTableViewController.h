@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+// Controls the table displaying deals to the user
 @interface ECTableViewController : UITableViewController
 
 @end

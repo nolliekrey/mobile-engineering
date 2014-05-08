@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+// An empty implementation of a UINavigationController added so we'd have a navigation bar at the top
+// of the enclosed table
 @interface ECNavigationController : UINavigationController
 
 @end
