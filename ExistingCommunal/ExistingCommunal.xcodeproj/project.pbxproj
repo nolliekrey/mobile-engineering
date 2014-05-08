@@ -26,6 +26,7 @@
 		0FAACA4319188F4500CF9CDF /* ECDeal.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAACA4219188F4500CF9CDF /* ECDeal.m */; };
 		0FAACA471918A00700CF9CDF /* ECDealTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAACA461918A00700CF9CDF /* ECDealTableViewCell.m */; };
 		0FAACA4B1919CE5900CF9CDF /* ECNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAACA4A1919CE5900CF9CDF /* ECNavigationController.m */; };
+		0FAACA4D191B41FB00CF9CDF /* Discussion.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0FAACA4C191B41FB00CF9CDF /* Discussion.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		0FAACA461918A00700CF9CDF /* ECDealTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECDealTableViewCell.m; sourceTree = "<group>"; };
 		0FAACA491919CE5900CF9CDF /* ECNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECNavigationController.h; sourceTree = "<group>"; };
 		0FAACA4A1919CE5900CF9CDF /* ECNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ECNavigationController.m; sourceTree = "<group>"; };
+		0FAACA4C191B41FB00CF9CDF /* Discussion.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Discussion.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 				0FAACA121915D51A00CF9CDF /* Main.storyboard */,
 				0FAACA181915D51B00CF9CDF /* Images.xcassets */,
 				0FAACA071915D51A00CF9CDF /* Supporting Files */,
+				0FAACA4C191B41FB00CF9CDF /* Discussion.txt */,
 			);
 			path = ExistingCommunal;
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FAACA4D191B41FB00CF9CDF /* Discussion.txt in Resources */,
 				0FAACA191915D51B00CF9CDF /* Images.xcassets in Resources */,
 				0FAACA0B1915D51A00CF9CDF /* InfoPlist.strings in Resources */,
 				0FAACA141915D51A00CF9CDF /* Main.storyboard in Resources */,

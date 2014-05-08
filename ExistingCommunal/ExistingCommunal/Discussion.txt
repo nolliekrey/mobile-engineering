@@ -1,0 +1,10 @@
+Welcome to Existing Communal
+
+I wrote Existing Communal after work a few nights this week. It was actually kind of fun writing something from scratch without any external libraries. Becoming more familiar with GitHub and the Mac app was a bonus. I have used SVN at work for a few jobs in a row and my current project leverages AFNetworking, SDWebImage, RestKit and others to handle various, repeated tasks.
+
+My aim to was to show an understanding of iOS, Objective-C and good use of InterfaceBuilder. As the task was to hopefully take a matter of hours I've omitted a lot of bells and whistles including sharing, background fetch and better logging. Instead I focused on easy to read and maintain code with a pleasant presentation that shows an eye for deference. 
+
+Thanks for your consideration.
+
+
+ Jon Whitmore

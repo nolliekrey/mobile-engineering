@@ -20,6 +20,15 @@
 // Action triggered when the deal's image is clicked
 - (IBAction)triggerDealImageActionWithSender:(id)sender;
 
+// Sets information in the cell's deal-related outlets
+- (void)populateDealFieldsForCell:(ECDealTableViewCell *)cell with:(ECDeal *)deal;
+
+// Sets information in the cell's avatar-related outlets
+- (void)populateAvatarFieldsForCell:(ECDealTableViewCell *)cell with:(ECDeal *)deal;
+
+// Clears existing gesture recognizers and adds one with the correct tag (indexPath.row)
+- (void)configureGestureRecognizerFor:(ECDealTableViewCell *)cell at:(NSIndexPath *)indexPath;
+
 // Collection of Existing Communal deals downloaded from kECDealJSONURL
 @property (nonatomic, strong) NSMutableArray *deals;
 
@@ -173,11 +182,12 @@ NSString * const kECDealJSONURL = @"http://sheltered-bastion-2512.herokuapp.com/
     static NSString *CellIdentifier = @"ECDealCellId";
     ECDealTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     if ([cell.dealLabel.text isEqualToString:@"Label"]) {
-        // This is a new label and it needs a gradient
+        // This is a new label and it needs a gradient to ensure the text stands out over the image
+        // without completely obscuring part of the image
         cell.gradientView.backgroundColor = [UIColor clearColor];
         CAGradientLayer *gradient = [CAGradientLayer layer];
         gradient.frame = cell.gradientView.bounds;
-        UIColor *silverColor = [UIColor colorWithRed:198.0f/255.0f green:198.0f/255.0f blue:198.0f/255.0f alpha:0.5];
+        UIColor *silverColor = [UIColor colorWithRed:198/255.0f green:198/255.0f blue:198/255.0f alpha:0.5];
         gradient.colors = [NSArray arrayWithObjects:(id)[silverColor CGColor], (id)[[UIColor clearColor] CGColor], nil];
         [cell.gradientView.layer insertSublayer:gradient atIndex:0];
         
@@ -186,67 +196,86 @@ NSString * const kECDealJSONURL = @"http://sheltered-bastion-2512.herokuapp.com/
         [cell.avatarView.layer setCornerRadius:5.0f];
     }
     
+    [self configureGestureRecognizerFor:cell at:indexPath];
+    
+    ECDeal *deal = [self.deals objectAtIndex:indexPath.row];
+    [self populateDealFieldsForCell:cell with:deal];
+    [self populateAvatarFieldsForCell:cell with:deal];
+    
+    return cell;
+}
+
+- (void)configureGestureRecognizerFor:(ECDealTableViewCell *)cell at:(NSIndexPath *)indexPath
+{
+    NSArray *gestureRecognizers = [cell.mainImage gestureRecognizers];
+    for (UIGestureRecognizer *gr in gestureRecognizers) {
+        [cell.mainImage removeGestureRecognizer:gr];
+    }
     // listen for taps on the main image
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(triggerDealImageActionWithSender:)];
     tapRecognizer.cancelsTouchesInView = YES;
     tapRecognizer.numberOfTapsRequired = 1;
-    cell.mainImage.tag = indexPath.row;
+    cell.mainImage.tag = indexPath.row; // Set the tag so we know what deal's URL to use
     [cell.mainImage addGestureRecognizer:tapRecognizer];
-    
-    // populate the deal-specific parts of the cell
-    ECDeal *deal = [self.deals objectAtIndex:indexPath.row];
+}
+
+- (void)populateDealFieldsForCell:(ECDealTableViewCell *)cell with:(ECDeal *)deal
+{
     cell.dealLabel.text = deal.monetaryInvestment;
     cell.sponsorLabel.text = deal.sponsor;
     if (!deal.img) {
-        //get a dispatch queue
+        // get a dispatch queue of default priority
         dispatch_queue_t concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        //this will start the image loading in bg
+        // load the image in the background
         dispatch_async(concurrentQueue, ^{
             NSURL *url = [[NSURL alloc] initWithString:deal.src];
             NSData *image = [[NSData alloc] initWithContentsOfURL:url];
             
-            //this will set the image when loading is finished
+            // display the image in the main queue
             dispatch_async(dispatch_get_main_queue(), ^{
                 deal.img = [UIImage imageWithData:image];
                 cell.mainImage.alpha = 0.0f;
                 cell.mainImage.image = deal.img;
+                // use an alpha fade to ease the image in
                 [UIView animateWithDuration:0.2f
                                       delay:0.0f
                                     options:UIViewAnimationOptionAllowUserInteraction
                                  animations:^{
                                      cell.mainImage.alpha = 1.0f;
                                  }
-                 completion:nil];
-            });
-        });
-    
-    // populate the avatar parts of the cell
-    cell.avatarLabel.text = deal.user.username;
-        //get a dispatch queue
-        dispatch_queue_t concurrentQueue2 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        //this will start the image loading in bg
-        dispatch_async(concurrentQueue2, ^{
-            NSURL *url = [[NSURL alloc] initWithString:deal.user.avatar.src];
-            NSData *image = [[NSData alloc] initWithContentsOfURL:url];
-            
-            //this will set the image when loading is finished
-            dispatch_async(dispatch_get_main_queue(), ^{
-                cell.avatar.alpha = 0.0f;
-                cell.avatar.image = [UIImage imageWithData:image];
-                [UIView animateWithDuration:0.2f
-                                      delay:0.0f
-                                    options:UIViewAnimationOptionAllowUserInteraction
-                                 animations:^{
-                                     cell.avatar.alpha = 1.0f;
-                                 }
                                  completion:nil];
             });
         });
-        
     } else {
+        // use the cached image
         cell.mainImage.image = deal.img;
     }
-    
-    return cell;
 }
+
+- (void)populateAvatarFieldsForCell:(ECDealTableViewCell *)cell with:(ECDeal *)deal
+{
+    cell.avatarLabel.text = deal.user.username;
+    // get a dispatch queue of default priority
+    dispatch_queue_t concurrentQueue2 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    // load the image in the background
+    dispatch_async(concurrentQueue2, ^{
+        NSURL *url = [[NSURL alloc] initWithString:deal.user.avatar.src];
+        NSData *image = [[NSData alloc] initWithContentsOfURL:url];
+        
+        // display the image in the main queue
+        dispatch_async(dispatch_get_main_queue(), ^{
+            cell.avatar.alpha = 0.0f;
+            cell.avatar.image = [UIImage imageWithData:image];
+            // use an alpha fade to ease the image in
+            [UIView animateWithDuration:0.2f
+                                  delay:0.0f
+                                options:UIViewAnimationOptionAllowUserInteraction
+                             animations:^{
+                                 cell.avatar.alpha = 1.0f;
+                             }
+                             completion:nil];
+        });
+    });
+}
+
 @end
