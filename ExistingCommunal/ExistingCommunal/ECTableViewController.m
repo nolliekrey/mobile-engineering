@@ -23,8 +23,11 @@
 // Collection of Existing Communal deals downloaded from kECDealJSONURL
 @property (nonatomic, strong) NSMutableArray *deals;
 
-// Background work/downloading indicator
+// Initial background downloading indicator
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
+
+// Pull to refresh download indicator
+@property (nonatomic, strong) UIRefreshControl *pulldownRefreshControl;
 
 @end
 
@@ -40,35 +43,37 @@ NSString * const kECDealJSONURL = @"http://sheltered-bastion-2512.herokuapp.com/
     self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:109/255.0f green:79/255.0f blue:171/255.0f alpha:1.0f];
     // with white text
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
-    
+    // Give ourselves an empty array of deals
     _deals = [[NSMutableArray alloc] init];
-    [self fetchData];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    // Show the user an initial spinner in the middle of the tableview
+    self.spinner = [[UIActivityIndicatorView alloc]
+                    initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.spinner.center = CGPointMake(160, 240);
+    self.spinner.hidesWhenStopped = YES;
+    [self.view addSubview:self.spinner];
+    [self.spinner startAnimating];
+    
+    self.pulldownRefreshControl = [[UIRefreshControl alloc] init];
+    [self.pulldownRefreshControl addTarget:self action:@selector(fetchData) forControlEvents:UIControlEventValueChanged];
+    [self.view addSubview:self.pulldownRefreshControl];
+    
+    // Get the user some deals!
+    [self fetchData];
 }
 
 - (void)fetchData
 {
-    if (!self.spinner) {
-        self.spinner = [[UIActivityIndicatorView alloc]
-                                            initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        self.spinner.center = CGPointMake(160, 240);
-        self.spinner.hidesWhenStopped = YES;
-        [self.view addSubview:self.spinner];
-        [self.spinner startAnimating];
-    }
-    
     NSURL *url = [[NSURL alloc] initWithString:kECDealJSONURL];
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:url];
     
     // Create a completion handler to parse and marshall JSON
     void (^completionHandler) (NSURLResponse* response, NSData* data, NSError* connectionError) =
     ^(NSURLResponse* response, NSData* jsonData, NSError* connectionError) {
+        // Stop the spinner if this is our first fetch
         [self.spinner stopAnimating];
+        // Stop the pulldown refresh control if this is a subsequent refresh
+        [self.pulldownRefreshControl endRefreshing];
         if (!connectionError) {
             NSArray *asyncItems = [NSJSONSerialization JSONObjectWithData:jsonData
                                                                        options:NSJSONReadingMutableLeaves
