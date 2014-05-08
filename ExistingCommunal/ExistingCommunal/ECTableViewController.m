@@ -17,6 +17,9 @@
 // Fetches JSON data from the server and parses it
 - (void)fetchData;
 
+// Action triggered when the deal's image is clicked
+- (IBAction)triggerDealImageActionWithSender:(id)sender;
+
 // Collection of Existing Communal deals downloaded from kECDealJSONURL
 @property(nonatomic, strong)NSMutableArray *deals;
 
@@ -30,6 +33,11 @@ NSString * const kECDealJSONURL = @"http://sheltered-bastion-2512.herokuapp.com/
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    // Make the navigation bar a nice purple
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:109/255.0f green:79/255.0f blue:171/255.0f alpha:1.0f];
+    // with white text
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    
     _deals = [[NSMutableArray alloc] init];
     [self fetchData];
     
@@ -105,10 +113,25 @@ NSString * const kECDealJSONURL = @"http://sheltered-bastion-2512.herokuapp.com/
     }
 }
 
+- (IBAction)triggerDealImageActionWithSender:(id)sender
+{
+    UITapGestureRecognizer *tapRecognizer = (UITapGestureRecognizer *)sender;
+    UIImageView *imageView = (UIImageView *)tapRecognizer.view;
+    ECDeal *deal = [self.deals objectAtIndex:imageView.tag];
+    NSURL *url = [NSURL URLWithString:deal.href];
+    if (![[UIApplication sharedApplication] openURL:url]) {
+        // It will be apparent to the user that the browser did not open, so note this for debugging
+        NSLog(@"%@%@",@"Failed to open url:",[url description]);
+    }
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    // get rid of our images
+    for (ECDeal *deal in self.deals) {
+        deal.img = nil;
+    }
 }
 
 #pragma mark - Table view data source
@@ -127,7 +150,7 @@ NSString * const kECDealJSONURL = @"http://sheltered-bastion-2512.herokuapp.com/
 {
     static NSString *CellIdentifier = @"ECDealCellId";
     ECDealTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    if ([cell.label.text isEqualToString:@"Label"]) {
+    if ([cell.dealLabel.text isEqualToString:@"Label"]) {
         // This is a new label and it needs a gradient
         cell.gradientView.backgroundColor = [UIColor clearColor];
         CAGradientLayer *gradient = [CAGradientLayer layer];
@@ -137,8 +160,15 @@ NSString * const kECDealJSONURL = @"http://sheltered-bastion-2512.herokuapp.com/
         [cell.gradientView.layer insertSublayer:gradient atIndex:0];
     }
     
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(triggerDealImageActionWithSender:)];
+    tapRecognizer.cancelsTouchesInView = YES;
+    tapRecognizer.numberOfTapsRequired = 1;
+    cell.mainImage.tag = indexPath.row;
+    [cell.mainImage addGestureRecognizer:tapRecognizer];
+    
     ECDeal *deal = [self.deals objectAtIndex:indexPath.row];
-    cell.label.text = deal.monetaryInvestment;
+    cell.dealLabel.text = deal.monetaryInvestment;
+    cell.sponsorLabel.text = deal.sponsor;
     if (!deal.img) {
         //get a dispatch queue
         dispatch_queue_t concurrentQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);

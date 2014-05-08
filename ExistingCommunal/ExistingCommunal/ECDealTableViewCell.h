@@ -11,12 +11,16 @@
 // A tableview cell for Existing Communal deal display
 @interface ECDealTableViewCell : UITableViewCell
 
-// TODO: replace this Proof of concept label
-@property (strong, nonatomic) IBOutlet UILabel *label;
+// For text describing the deal to be purchased
+@property (strong, nonatomic) IBOutlet UILabel *dealLabel;
 
-// Gradient view
+// For the entity sponsoring a deal
+@property (strong, nonatomic) IBOutlet UILabel *sponsorLabel;
+
+// Gradient view to display text over
 @property (strong, nonatomic) IBOutlet UIView *gradientView;
 
+// The large image picturing the deal offered
 @property (strong, nonatomic) IBOutlet UIImageView *mainImage;
 
 @end
