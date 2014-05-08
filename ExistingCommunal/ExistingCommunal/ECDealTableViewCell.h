@@ -23,4 +23,13 @@
 // The large image picturing the deal offered
 @property (strong, nonatomic) IBOutlet UIImageView *mainImage;
 
+// The background of the avatar and it's label
+@property (strong, nonatomic) IBOutlet UIView *avatarView;
+
+// The associated user's avatar
+@property (strong, nonatomic) IBOutlet UIImageView *avatar;
+
+// The avatar's associated text
+@property (strong, nonatomic) IBOutlet UILabel *avatarLabel;
+
 @end

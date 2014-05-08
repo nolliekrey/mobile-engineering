@@ -29,6 +29,9 @@
 // Pull to refresh download indicator
 @property (nonatomic, strong) UIRefreshControl *pulldownRefreshControl;
 
+// A pleasant purple for the app
+@property (nonatomic, strong) UIColor *theColorPurple;
+
 @end
 
 // The URL string that will be used to fetch data from the server
@@ -39,8 +42,9 @@ NSString * const kECDealJSONURL = @"http://sheltered-bastion-2512.herokuapp.com/
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.theColorPurple = [UIColor colorWithRed:109/255.0f green:79/255.0f blue:171/255.0f alpha:1.0f];
     // Make the navigation bar a nice purple
-    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:109/255.0f green:79/255.0f blue:171/255.0f alpha:1.0f];
+    self.navigationController.navigationBar.barTintColor = self.theColorPurple;
     // with white text
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     // Give ourselves an empty array of deals
@@ -176,14 +180,20 @@ NSString * const kECDealJSONURL = @"http://sheltered-bastion-2512.herokuapp.com/
         UIColor *silverColor = [UIColor colorWithRed:198.0f/255.0f green:198.0f/255.0f blue:198.0f/255.0f alpha:0.5];
         gradient.colors = [NSArray arrayWithObjects:(id)[silverColor CGColor], (id)[[UIColor clearColor] CGColor], nil];
         [cell.gradientView.layer insertSublayer:gradient atIndex:0];
+        
+        // configure the avatar view while we're at it
+        cell.avatarView.backgroundColor = self.theColorPurple;
+        [cell.avatarView.layer setCornerRadius:5.0f];
     }
     
+    // listen for taps on the main image
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(triggerDealImageActionWithSender:)];
     tapRecognizer.cancelsTouchesInView = YES;
     tapRecognizer.numberOfTapsRequired = 1;
     cell.mainImage.tag = indexPath.row;
     [cell.mainImage addGestureRecognizer:tapRecognizer];
     
+    // populate the deal-specific parts of the cell
     ECDeal *deal = [self.deals objectAtIndex:indexPath.row];
     cell.dealLabel.text = deal.monetaryInvestment;
     cell.sponsorLabel.text = deal.sponsor;
@@ -209,6 +219,30 @@ NSString * const kECDealJSONURL = @"http://sheltered-bastion-2512.herokuapp.com/
                  completion:nil];
             });
         });
+    
+    // populate the avatar parts of the cell
+    cell.avatarLabel.text = deal.user.username;
+        //get a dispatch queue
+        dispatch_queue_t concurrentQueue2 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        //this will start the image loading in bg
+        dispatch_async(concurrentQueue2, ^{
+            NSURL *url = [[NSURL alloc] initWithString:deal.user.avatar.src];
+            NSData *image = [[NSData alloc] initWithContentsOfURL:url];
+            
+            //this will set the image when loading is finished
+            dispatch_async(dispatch_get_main_queue(), ^{
+                cell.avatar.alpha = 0.0f;
+                cell.avatar.image = [UIImage imageWithData:image];
+                [UIView animateWithDuration:0.2f
+                                      delay:0.0f
+                                    options:UIViewAnimationOptionAllowUserInteraction
+                                 animations:^{
+                                     cell.avatar.alpha = 1.0f;
+                                 }
+                                 completion:nil];
+            });
+        });
+        
     } else {
         cell.mainImage.image = deal.img;
     }

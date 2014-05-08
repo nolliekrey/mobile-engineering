@@ -48,9 +48,30 @@
                                             </subviews>
                                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <view alpha="0.84999999999999987" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OPg-J8-rME">
+                                            <rect key="frame" x="187" y="278" width="123" height="35"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ELc-ha-U7F">
+                                                    <rect key="frame" x="6" y="3" width="30" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </imageView>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8yQ-yU-grQ">
+                                                    <rect key="frame" x="39" y="14" width="77" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        </view>
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="avatar" destination="ELc-ha-U7F" id="CpV-tj-pJx"/>
+                                    <outlet property="avatarLabel" destination="8yQ-yU-grQ" id="3FS-Ki-0En"/>
+                                    <outlet property="avatarView" destination="OPg-J8-rME" id="6cg-3C-u1w"/>
                                     <outlet property="dealLabel" destination="GNn-zJ-mD0" id="lab-u5-vR3"/>
                                     <outlet property="gradientView" destination="7gu-x4-o4v" id="ZEX-DU-QDO"/>
                                     <outlet property="mainImage" destination="VIB-m6-NrR" id="3Eo-X6-ej8"/>
